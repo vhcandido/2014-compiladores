@@ -4,7 +4,7 @@
 Os trabalhos apresentados utilizam as ferramentas Flex e Bison.
 
 Trabalhos:
-:1 - Analisador léxico
-:2 - Analisador sintático
-:3 - Analisador semântico
+- `1 - Analisador léxico
+- `2 - Analisador sintático
+- `3 - Analisador semântico
 
