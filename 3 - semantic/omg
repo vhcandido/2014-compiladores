@@ -1,0 +1,99 @@
+$accept: program $end
+
+program: MAIN '(' ')' '{' commands '}' program_end
+       | error
+
+program_end: %empty
+           | ID '(' ')' '{' commands '}' program_end
+           | error
+
+commands: command_list
+
+command_list: '{' command_list '}'
+            | command command_list
+            | %empty
+
+command: cmd ';'
+       | stmt
+       | error
+
+stmt: if_stmt
+    | for_stmt
+    | while_stmt
+    | dowhile_stmt
+
+cmd: PRINT STRING
+   | BREAK
+   | RETURN
+   | attrib
+   | declaration
+
+if_stmt: IF '(' l_expr ')' '{' commands '}' else_stmt
+
+else_stmt: %empty
+         | ELSE '{' commands '}'
+
+for_stmt: FOR '(' ffirst ';' l_expr ';' fthird ')' '{' commands '}'
+
+ffirst: %empty
+      | attrib_list
+
+fthird: %empty
+      | cmd ',' fthird
+      | cmd
+
+while_stmt: WHILE '(' l_expr ')' '{' commands '}'
+
+dowhile_stmt: DO '{' commands '}' WHILE '(' l_expr ')' ';'
+
+declaration: INT_TYPE ID
+           | FLOAT_TYPE ID
+
+attrib_list: attrib ',' attrib_list
+           | attrib
+
+attrib: i_attrib
+      | r_attrib
+      | ID MATH_INC
+      | ID MATH_DEC
+      | ID '=' ID
+      | error
+
+i_attrib: ID '=' i_expr
+
+r_attrib: ID '=' r_expr
+
+l_expr: l_expr LOG_EQL l_factor
+      | l_expr LOG_AND l_factor
+      | l_expr LOG_OR l_factor
+      | l_expr LOG_GT l_factor
+      | l_expr LOG_LT l_factor
+      | LOG_NOT l_expr
+      | l_factor
+
+l_factor: '(' l_expr ')'
+        | INTEGER
+        | REAL
+        | ID
+
+i_expr: i_expr '+' i_term
+      | i_expr '-' i_term
+      | i_term
+
+r_expr: r_expr '+' r_term
+      | r_expr '-' r_term
+      | r_term
+
+i_term: i_term '*' i_factor
+      | i_term '/' i_factor
+      | i_factor
+
+r_term: r_term '*' r_factor
+      | r_term '/' r_factor
+      | r_factor
+
+i_factor: '(' i_expr ')'
+        | INTEGER
+
+r_factor: '(' r_expr ')'
+        | REAL

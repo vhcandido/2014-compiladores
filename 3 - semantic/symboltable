@@ -1,0 +1,24 @@
+SYMBOL TABLE
+17 entries
+
++-------+---------+------------------------------+
+|   -   |  TYPE   |        TOKEN = VALUE         |
++-------+---------+------------------------------+
+| 1     | INTEGER |  a = 1
+| 2     |  FLOAT  |  bla = 9.500000
+| 3     | INTEGER |  n = 22
+| 4     |  FLOAT  |  id = 0.000000
+| 5     | INTEGER |  d = 40
+| 6     | INTEGER |  teste_id = 40
+| 7     | KEYWORD |  float
+| 8     | KEYWORD |  int
+| 9     | KEYWORD |  return
+| 10    | KEYWORD |  print
+| 11    | KEYWORD |  break
+| 12    | KEYWORD |  for
+| 13    | KEYWORD |  while
+| 14    | KEYWORD |  do
+| 15    | KEYWORD |  else
+| 16    | KEYWORD |  if
+| 17    | KEYWORD |  main
++-------+---------+------------------------------+

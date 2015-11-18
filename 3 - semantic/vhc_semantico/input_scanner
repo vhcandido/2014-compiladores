@@ -1,0 +1,34 @@
+// as declarações devem ser feitas
+// uma variável por linha, assim
+// como as atribuições
+main() {
+	int teste_id;
+	int d;
+	teste_id = (5*(4+(4)));
+	d = teste_id*4; // operação inválida
+
+	if(b>10){ // identificador não declarado
+		float id;
+		int n;
+		id = 1124; // tipos de dados incompatíveis
+		n = 22;
+	}
+
+	print "baçlkajsdflas";
+	float bla;
+	bla = 10.50;
+
+	// tipos de dados incompatíveis
+	for(bla=d; bla>0; bla--) {
+		int a;
+		a = 1;
+
+		if(a || 0) {
+			// faz algo
+		}
+	}
+
+	while(1==0){}
+
+	return;
+}

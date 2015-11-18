@@ -1,0 +1,1778 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: MAIN '(' ')' '{' commands '}' program_end
+    2        | error
+
+    3 program_end: %empty
+    4            | ID '(' ')' '{' commands '}' program_end
+    5            | error
+
+    6 commands: command_list
+
+    7 command_list: '{' command_list '}'
+    8             | command command_list
+    9             | %empty
+
+   10 command: cmd ';'
+   11        | stmt
+   12        | error
+
+   13 stmt: if_stmt
+   14     | for_stmt
+   15     | while_stmt
+   16     | dowhile_stmt
+
+   17 cmd: PRINT STRING
+   18    | BREAK
+   19    | RETURN
+   20    | attrib
+   21    | declaration
+
+   22 if_stmt: IF '(' l_expr ')' '{' commands '}' else_stmt
+
+   23 else_stmt: %empty
+   24          | ELSE '{' commands '}'
+
+   25 for_stmt: FOR '(' ffirst ';' l_expr ';' fthird ')' '{' commands '}'
+
+   26 ffirst: %empty
+   27       | attrib_list
+
+   28 fthird: %empty
+   29       | cmd ',' fthird
+   30       | cmd
+
+   31 while_stmt: WHILE '(' l_expr ')' '{' commands '}'
+
+   32 dowhile_stmt: DO '{' commands '}' WHILE '(' l_expr ')' ';'
+
+   33 declaration: INT_TYPE ID
+   34            | FLOAT_TYPE ID
+
+   35 attrib_list: attrib ',' attrib_list
+   36            | attrib
+
+   37 attrib: i_attrib
+   38       | r_attrib
+   39       | ID MATH_INC
+   40       | ID MATH_DEC
+   41       | ID '=' ID
+   42       | error
+
+   43 i_attrib: ID '=' i_expr
+
+   44 r_attrib: ID '=' r_expr
+
+   45 l_expr: l_expr LOG_EQL l_factor
+   46       | l_expr LOG_AND l_factor
+   47       | l_expr LOG_OR l_factor
+   48       | l_expr LOG_GT l_factor
+   49       | l_expr LOG_LT l_factor
+   50       | LOG_NOT l_expr
+   51       | l_factor
+
+   52 l_factor: '(' l_expr ')'
+   53         | INTEGER
+   54         | REAL
+   55         | ID
+
+   56 i_expr: i_expr '+' i_term
+   57       | i_expr '-' i_term
+   58       | i_term
+
+   59 r_expr: r_expr '+' r_term
+   60       | r_expr '-' r_term
+   61       | r_term
+
+   62 i_term: i_term '*' i_factor
+   63       | i_term '/' i_factor
+   64       | i_factor
+
+   65 r_term: r_term '*' r_factor
+   66       | r_term '/' r_factor
+   67       | r_factor
+
+   68 i_factor: '(' i_expr ')'
+   69         | INTEGER
+
+   70 r_factor: '(' r_expr ')'
+   71         | REAL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 1 4 22 25 31 32 52 68 70
+')' (41) 1 4 22 25 31 32 52 68 70
+'*' (42) 62 65
+'+' (43) 56 59
+',' (44) 29 35
+'-' (45) 57 60
+'/' (47) 63 66
+';' (59) 10 25 32
+'=' (61) 41 43 44
+'{' (123) 1 4 7 22 24 25 31 32
+'}' (125) 1 4 7 22 24 25 31 32
+error (256) 2 5 12 42
+MAIN (258) 1
+IF (259) 22
+ELSE (260) 24
+DO (261) 32
+WHILE (262) 31 32
+FOR (263) 25
+BREAK (264) 18
+PRINT (265) 17
+RETURN (266) 19
+INT_TYPE (267) 33
+FLOAT_TYPE (268) 34
+STRING (269) 17
+INTEGER (270) 53 69
+REAL (271) 54 71
+ID (272) 4 33 34 39 40 41 43 44 55
+MATH_INC (273) 39
+MATH_DEC (274) 40
+LOG_EQL (275) 45
+LOG_LT (276) 49
+LOG_GT (277) 48
+LOG_AND (278) 46
+LOG_OR (279) 47
+LOG_NOT (280) 50
+
+
+Nonterminals, with rules where they appear
+
+$accept (37)
+    on left: 0
+program (38)
+    on left: 1 2, on right: 0
+program_end (39)
+    on left: 3 4 5, on right: 1 4
+commands (40)
+    on left: 6, on right: 1 4 22 24 25 31 32
+command_list (41)
+    on left: 7 8 9, on right: 6 7 8
+command (42)
+    on left: 10 11 12, on right: 8
+stmt (43)
+    on left: 13 14 15 16, on right: 11
+cmd (44)
+    on left: 17 18 19 20 21, on right: 10 29 30
+if_stmt (45)
+    on left: 22, on right: 13
+else_stmt (46)
+    on left: 23 24, on right: 22
+for_stmt (47)
+    on left: 25, on right: 14
+ffirst (48)
+    on left: 26 27, on right: 25
+fthird (49)
+    on left: 28 29 30, on right: 25 29
+while_stmt (50)
+    on left: 31, on right: 15
+dowhile_stmt (51)
+    on left: 32, on right: 16
+declaration (52)
+    on left: 33 34, on right: 21
+attrib_list (53)
+    on left: 35 36, on right: 27 35
+attrib (54)
+    on left: 37 38 39 40 41 42, on right: 20 35 36
+i_attrib (55)
+    on left: 43, on right: 37
+r_attrib (56)
+    on left: 44, on right: 38
+l_expr (57)
+    on left: 45 46 47 48 49 50 51, on right: 22 25 31 32 45 46 47 48
+    49 50 52
+l_factor (58)
+    on left: 52 53 54 55, on right: 45 46 47 48 49 51
+i_expr (59)
+    on left: 56 57 58, on right: 43 56 57 68
+r_expr (60)
+    on left: 59 60 61, on right: 44 59 60 70
+i_term (61)
+    on left: 62 63 64, on right: 56 57 58 62 63
+r_term (62)
+    on left: 65 66 67, on right: 59 60 61 65 66
+i_factor (63)
+    on left: 68 69, on right: 62 63 64
+r_factor (64)
+    on left: 70 71, on right: 65 66 67
+
+
+State 0
+
+    0 $accept: . program $end
+
+    error  shift, and go to state 1
+    MAIN   shift, and go to state 2
+
+    program  go to state 3
+
+
+State 1
+
+    2 program: error .
+
+    $default  reduce using rule 2 (program)
+
+
+State 2
+
+    1 program: MAIN . '(' ')' '{' commands '}' program_end
+
+    '('  shift, and go to state 4
+
+
+State 3
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 5
+
+
+State 4
+
+    1 program: MAIN '(' . ')' '{' commands '}' program_end
+
+    ')'  shift, and go to state 6
+
+
+State 5
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 6
+
+    1 program: MAIN '(' ')' . '{' commands '}' program_end
+
+    '{'  shift, and go to state 7
+
+
+State 7
+
+    1 program: MAIN '(' ')' '{' . commands '}' program_end
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    commands      go to state 20
+    command_list  go to state 21
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 8
+
+   12 command: error .
+   42 attrib: error .
+
+    ';'       reduce using rule 42 (attrib)
+    $default  reduce using rule 12 (command)
+
+
+State 9
+
+   22 if_stmt: IF . '(' l_expr ')' '{' commands '}' else_stmt
+
+    '('  shift, and go to state 33
+
+
+State 10
+
+   32 dowhile_stmt: DO . '{' commands '}' WHILE '(' l_expr ')' ';'
+
+    '{'  shift, and go to state 34
+
+
+State 11
+
+   31 while_stmt: WHILE . '(' l_expr ')' '{' commands '}'
+
+    '('  shift, and go to state 35
+
+
+State 12
+
+   25 for_stmt: FOR . '(' ffirst ';' l_expr ';' fthird ')' '{' commands '}'
+
+    '('  shift, and go to state 36
+
+
+State 13
+
+   18 cmd: BREAK .
+
+    $default  reduce using rule 18 (cmd)
+
+
+State 14
+
+   17 cmd: PRINT . STRING
+
+    STRING  shift, and go to state 37
+
+
+State 15
+
+   19 cmd: RETURN .
+
+    $default  reduce using rule 19 (cmd)
+
+
+State 16
+
+   33 declaration: INT_TYPE . ID
+
+    ID  shift, and go to state 38
+
+
+State 17
+
+   34 declaration: FLOAT_TYPE . ID
+
+    ID  shift, and go to state 39
+
+
+State 18
+
+   39 attrib: ID . MATH_INC
+   40       | ID . MATH_DEC
+   41       | ID . '=' ID
+   43 i_attrib: ID . '=' i_expr
+   44 r_attrib: ID . '=' r_expr
+
+    MATH_INC  shift, and go to state 40
+    MATH_DEC  shift, and go to state 41
+    '='       shift, and go to state 42
+
+
+State 19
+
+    7 command_list: '{' . command_list '}'
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    command_list  go to state 43
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 20
+
+    1 program: MAIN '(' ')' '{' commands . '}' program_end
+
+    '}'  shift, and go to state 44
+
+
+State 21
+
+    6 commands: command_list .
+
+    $default  reduce using rule 6 (commands)
+
+
+State 22
+
+    8 command_list: command . command_list
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    command_list  go to state 45
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 23
+
+   11 command: stmt .
+
+    $default  reduce using rule 11 (command)
+
+
+State 24
+
+   10 command: cmd . ';'
+
+    ';'  shift, and go to state 46
+
+
+State 25
+
+   13 stmt: if_stmt .
+
+    $default  reduce using rule 13 (stmt)
+
+
+State 26
+
+   14 stmt: for_stmt .
+
+    $default  reduce using rule 14 (stmt)
+
+
+State 27
+
+   15 stmt: while_stmt .
+
+    $default  reduce using rule 15 (stmt)
+
+
+State 28
+
+   16 stmt: dowhile_stmt .
+
+    $default  reduce using rule 16 (stmt)
+
+
+State 29
+
+   21 cmd: declaration .
+
+    $default  reduce using rule 21 (cmd)
+
+
+State 30
+
+   20 cmd: attrib .
+
+    $default  reduce using rule 20 (cmd)
+
+
+State 31
+
+   37 attrib: i_attrib .
+
+    $default  reduce using rule 37 (attrib)
+
+
+State 32
+
+   38 attrib: r_attrib .
+
+    $default  reduce using rule 38 (attrib)
+
+
+State 33
+
+   22 if_stmt: IF '(' . l_expr ')' '{' commands '}' else_stmt
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    LOG_NOT  shift, and go to state 50
+    '('      shift, and go to state 51
+
+    l_expr    go to state 52
+    l_factor  go to state 53
+
+
+State 34
+
+   32 dowhile_stmt: DO '{' . commands '}' WHILE '(' l_expr ')' ';'
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    commands      go to state 54
+    command_list  go to state 21
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 35
+
+   31 while_stmt: WHILE '(' . l_expr ')' '{' commands '}'
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    LOG_NOT  shift, and go to state 50
+    '('      shift, and go to state 51
+
+    l_expr    go to state 55
+    l_factor  go to state 53
+
+
+State 36
+
+   25 for_stmt: FOR '(' . ffirst ';' l_expr ';' fthird ')' '{' commands '}'
+
+    error  shift, and go to state 56
+    ID     shift, and go to state 18
+
+    ';'  reduce using rule 26 (ffirst)
+
+    ffirst       go to state 57
+    attrib_list  go to state 58
+    attrib       go to state 59
+    i_attrib     go to state 31
+    r_attrib     go to state 32
+
+
+State 37
+
+   17 cmd: PRINT STRING .
+
+    $default  reduce using rule 17 (cmd)
+
+
+State 38
+
+   33 declaration: INT_TYPE ID .
+
+    $default  reduce using rule 33 (declaration)
+
+
+State 39
+
+   34 declaration: FLOAT_TYPE ID .
+
+    $default  reduce using rule 34 (declaration)
+
+
+State 40
+
+   39 attrib: ID MATH_INC .
+
+    $default  reduce using rule 39 (attrib)
+
+
+State 41
+
+   40 attrib: ID MATH_DEC .
+
+    $default  reduce using rule 40 (attrib)
+
+
+State 42
+
+   41 attrib: ID '=' . ID
+   43 i_attrib: ID '=' . i_expr
+   44 r_attrib: ID '=' . r_expr
+
+    INTEGER  shift, and go to state 60
+    REAL     shift, and go to state 61
+    ID       shift, and go to state 62
+    '('      shift, and go to state 63
+
+    i_expr    go to state 64
+    r_expr    go to state 65
+    i_term    go to state 66
+    r_term    go to state 67
+    i_factor  go to state 68
+    r_factor  go to state 69
+
+
+State 43
+
+    7 command_list: '{' command_list . '}'
+
+    '}'  shift, and go to state 70
+
+
+State 44
+
+    1 program: MAIN '(' ')' '{' commands '}' . program_end
+
+    error  shift, and go to state 71
+    ID     shift, and go to state 72
+
+    $end  reduce using rule 3 (program_end)
+
+    program_end  go to state 73
+
+
+State 45
+
+    8 command_list: command command_list .
+
+    $default  reduce using rule 8 (command_list)
+
+
+State 46
+
+   10 command: cmd ';' .
+
+    $default  reduce using rule 10 (command)
+
+
+State 47
+
+   53 l_factor: INTEGER .
+
+    $default  reduce using rule 53 (l_factor)
+
+
+State 48
+
+   54 l_factor: REAL .
+
+    $default  reduce using rule 54 (l_factor)
+
+
+State 49
+
+   55 l_factor: ID .
+
+    $default  reduce using rule 55 (l_factor)
+
+
+State 50
+
+   50 l_expr: LOG_NOT . l_expr
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    LOG_NOT  shift, and go to state 50
+    '('      shift, and go to state 51
+
+    l_expr    go to state 74
+    l_factor  go to state 53
+
+
+State 51
+
+   52 l_factor: '(' . l_expr ')'
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    LOG_NOT  shift, and go to state 50
+    '('      shift, and go to state 51
+
+    l_expr    go to state 75
+    l_factor  go to state 53
+
+
+State 52
+
+   22 if_stmt: IF '(' l_expr . ')' '{' commands '}' else_stmt
+   45 l_expr: l_expr . LOG_EQL l_factor
+   46       | l_expr . LOG_AND l_factor
+   47       | l_expr . LOG_OR l_factor
+   48       | l_expr . LOG_GT l_factor
+   49       | l_expr . LOG_LT l_factor
+
+    LOG_EQL  shift, and go to state 76
+    LOG_LT   shift, and go to state 77
+    LOG_GT   shift, and go to state 78
+    LOG_AND  shift, and go to state 79
+    LOG_OR   shift, and go to state 80
+    ')'      shift, and go to state 81
+
+
+State 53
+
+   51 l_expr: l_factor .
+
+    $default  reduce using rule 51 (l_expr)
+
+
+State 54
+
+   32 dowhile_stmt: DO '{' commands . '}' WHILE '(' l_expr ')' ';'
+
+    '}'  shift, and go to state 82
+
+
+State 55
+
+   31 while_stmt: WHILE '(' l_expr . ')' '{' commands '}'
+   45 l_expr: l_expr . LOG_EQL l_factor
+   46       | l_expr . LOG_AND l_factor
+   47       | l_expr . LOG_OR l_factor
+   48       | l_expr . LOG_GT l_factor
+   49       | l_expr . LOG_LT l_factor
+
+    LOG_EQL  shift, and go to state 76
+    LOG_LT   shift, and go to state 77
+    LOG_GT   shift, and go to state 78
+    LOG_AND  shift, and go to state 79
+    LOG_OR   shift, and go to state 80
+    ')'      shift, and go to state 83
+
+
+State 56
+
+   42 attrib: error .
+
+    $default  reduce using rule 42 (attrib)
+
+
+State 57
+
+   25 for_stmt: FOR '(' ffirst . ';' l_expr ';' fthird ')' '{' commands '}'
+
+    ';'  shift, and go to state 84
+
+
+State 58
+
+   27 ffirst: attrib_list .
+
+    $default  reduce using rule 27 (ffirst)
+
+
+State 59
+
+   35 attrib_list: attrib . ',' attrib_list
+   36            | attrib .
+
+    ','  shift, and go to state 85
+
+    $default  reduce using rule 36 (attrib_list)
+
+
+State 60
+
+   69 i_factor: INTEGER .
+
+    $default  reduce using rule 69 (i_factor)
+
+
+State 61
+
+   71 r_factor: REAL .
+
+    $default  reduce using rule 71 (r_factor)
+
+
+State 62
+
+   41 attrib: ID '=' ID .
+
+    $default  reduce using rule 41 (attrib)
+
+
+State 63
+
+   68 i_factor: '(' . i_expr ')'
+   70 r_factor: '(' . r_expr ')'
+
+    INTEGER  shift, and go to state 60
+    REAL     shift, and go to state 61
+    '('      shift, and go to state 63
+
+    i_expr    go to state 86
+    r_expr    go to state 87
+    i_term    go to state 66
+    r_term    go to state 67
+    i_factor  go to state 68
+    r_factor  go to state 69
+
+
+State 64
+
+   43 i_attrib: ID '=' i_expr .
+   56 i_expr: i_expr . '+' i_term
+   57       | i_expr . '-' i_term
+
+    '+'  shift, and go to state 88
+    '-'  shift, and go to state 89
+
+    $default  reduce using rule 43 (i_attrib)
+
+
+State 65
+
+   44 r_attrib: ID '=' r_expr .
+   59 r_expr: r_expr . '+' r_term
+   60       | r_expr . '-' r_term
+
+    '+'  shift, and go to state 90
+    '-'  shift, and go to state 91
+
+    $default  reduce using rule 44 (r_attrib)
+
+
+State 66
+
+   58 i_expr: i_term .
+   62 i_term: i_term . '*' i_factor
+   63       | i_term . '/' i_factor
+
+    '*'  shift, and go to state 92
+    '/'  shift, and go to state 93
+
+    $default  reduce using rule 58 (i_expr)
+
+
+State 67
+
+   61 r_expr: r_term .
+   65 r_term: r_term . '*' r_factor
+   66       | r_term . '/' r_factor
+
+    '*'  shift, and go to state 94
+    '/'  shift, and go to state 95
+
+    $default  reduce using rule 61 (r_expr)
+
+
+State 68
+
+   64 i_term: i_factor .
+
+    $default  reduce using rule 64 (i_term)
+
+
+State 69
+
+   67 r_term: r_factor .
+
+    $default  reduce using rule 67 (r_term)
+
+
+State 70
+
+    7 command_list: '{' command_list '}' .
+
+    $default  reduce using rule 7 (command_list)
+
+
+State 71
+
+    5 program_end: error .
+
+    $default  reduce using rule 5 (program_end)
+
+
+State 72
+
+    4 program_end: ID . '(' ')' '{' commands '}' program_end
+
+    '('  shift, and go to state 96
+
+
+State 73
+
+    1 program: MAIN '(' ')' '{' commands '}' program_end .
+
+    $default  reduce using rule 1 (program)
+
+
+State 74
+
+   45 l_expr: l_expr . LOG_EQL l_factor
+   46       | l_expr . LOG_AND l_factor
+   47       | l_expr . LOG_OR l_factor
+   48       | l_expr . LOG_GT l_factor
+   49       | l_expr . LOG_LT l_factor
+   50       | LOG_NOT l_expr .
+
+    $default  reduce using rule 50 (l_expr)
+
+
+State 75
+
+   45 l_expr: l_expr . LOG_EQL l_factor
+   46       | l_expr . LOG_AND l_factor
+   47       | l_expr . LOG_OR l_factor
+   48       | l_expr . LOG_GT l_factor
+   49       | l_expr . LOG_LT l_factor
+   52 l_factor: '(' l_expr . ')'
+
+    LOG_EQL  shift, and go to state 76
+    LOG_LT   shift, and go to state 77
+    LOG_GT   shift, and go to state 78
+    LOG_AND  shift, and go to state 79
+    LOG_OR   shift, and go to state 80
+    ')'      shift, and go to state 97
+
+
+State 76
+
+   45 l_expr: l_expr LOG_EQL . l_factor
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    '('      shift, and go to state 51
+
+    l_factor  go to state 98
+
+
+State 77
+
+   49 l_expr: l_expr LOG_LT . l_factor
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    '('      shift, and go to state 51
+
+    l_factor  go to state 99
+
+
+State 78
+
+   48 l_expr: l_expr LOG_GT . l_factor
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    '('      shift, and go to state 51
+
+    l_factor  go to state 100
+
+
+State 79
+
+   46 l_expr: l_expr LOG_AND . l_factor
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    '('      shift, and go to state 51
+
+    l_factor  go to state 101
+
+
+State 80
+
+   47 l_expr: l_expr LOG_OR . l_factor
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    '('      shift, and go to state 51
+
+    l_factor  go to state 102
+
+
+State 81
+
+   22 if_stmt: IF '(' l_expr ')' . '{' commands '}' else_stmt
+
+    '{'  shift, and go to state 103
+
+
+State 82
+
+   32 dowhile_stmt: DO '{' commands '}' . WHILE '(' l_expr ')' ';'
+
+    WHILE  shift, and go to state 104
+
+
+State 83
+
+   31 while_stmt: WHILE '(' l_expr ')' . '{' commands '}'
+
+    '{'  shift, and go to state 105
+
+
+State 84
+
+   25 for_stmt: FOR '(' ffirst ';' . l_expr ';' fthird ')' '{' commands '}'
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    LOG_NOT  shift, and go to state 50
+    '('      shift, and go to state 51
+
+    l_expr    go to state 106
+    l_factor  go to state 53
+
+
+State 85
+
+   35 attrib_list: attrib ',' . attrib_list
+
+    error  shift, and go to state 56
+    ID     shift, and go to state 18
+
+    attrib_list  go to state 107
+    attrib       go to state 59
+    i_attrib     go to state 31
+    r_attrib     go to state 32
+
+
+State 86
+
+   56 i_expr: i_expr . '+' i_term
+   57       | i_expr . '-' i_term
+   68 i_factor: '(' i_expr . ')'
+
+    '+'  shift, and go to state 88
+    '-'  shift, and go to state 89
+    ')'  shift, and go to state 108
+
+
+State 87
+
+   59 r_expr: r_expr . '+' r_term
+   60       | r_expr . '-' r_term
+   70 r_factor: '(' r_expr . ')'
+
+    '+'  shift, and go to state 90
+    '-'  shift, and go to state 91
+    ')'  shift, and go to state 109
+
+
+State 88
+
+   56 i_expr: i_expr '+' . i_term
+
+    INTEGER  shift, and go to state 60
+    '('      shift, and go to state 110
+
+    i_term    go to state 111
+    i_factor  go to state 68
+
+
+State 89
+
+   57 i_expr: i_expr '-' . i_term
+
+    INTEGER  shift, and go to state 60
+    '('      shift, and go to state 110
+
+    i_term    go to state 112
+    i_factor  go to state 68
+
+
+State 90
+
+   59 r_expr: r_expr '+' . r_term
+
+    REAL  shift, and go to state 61
+    '('   shift, and go to state 113
+
+    r_term    go to state 114
+    r_factor  go to state 69
+
+
+State 91
+
+   60 r_expr: r_expr '-' . r_term
+
+    REAL  shift, and go to state 61
+    '('   shift, and go to state 113
+
+    r_term    go to state 115
+    r_factor  go to state 69
+
+
+State 92
+
+   62 i_term: i_term '*' . i_factor
+
+    INTEGER  shift, and go to state 60
+    '('      shift, and go to state 110
+
+    i_factor  go to state 116
+
+
+State 93
+
+   63 i_term: i_term '/' . i_factor
+
+    INTEGER  shift, and go to state 60
+    '('      shift, and go to state 110
+
+    i_factor  go to state 117
+
+
+State 94
+
+   65 r_term: r_term '*' . r_factor
+
+    REAL  shift, and go to state 61
+    '('   shift, and go to state 113
+
+    r_factor  go to state 118
+
+
+State 95
+
+   66 r_term: r_term '/' . r_factor
+
+    REAL  shift, and go to state 61
+    '('   shift, and go to state 113
+
+    r_factor  go to state 119
+
+
+State 96
+
+    4 program_end: ID '(' . ')' '{' commands '}' program_end
+
+    ')'  shift, and go to state 120
+
+
+State 97
+
+   52 l_factor: '(' l_expr ')' .
+
+    $default  reduce using rule 52 (l_factor)
+
+
+State 98
+
+   45 l_expr: l_expr LOG_EQL l_factor .
+
+    $default  reduce using rule 45 (l_expr)
+
+
+State 99
+
+   49 l_expr: l_expr LOG_LT l_factor .
+
+    $default  reduce using rule 49 (l_expr)
+
+
+State 100
+
+   48 l_expr: l_expr LOG_GT l_factor .
+
+    $default  reduce using rule 48 (l_expr)
+
+
+State 101
+
+   46 l_expr: l_expr LOG_AND l_factor .
+
+    $default  reduce using rule 46 (l_expr)
+
+
+State 102
+
+   47 l_expr: l_expr LOG_OR l_factor .
+
+    $default  reduce using rule 47 (l_expr)
+
+
+State 103
+
+   22 if_stmt: IF '(' l_expr ')' '{' . commands '}' else_stmt
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    commands      go to state 121
+    command_list  go to state 21
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 104
+
+   32 dowhile_stmt: DO '{' commands '}' WHILE . '(' l_expr ')' ';'
+
+    '('  shift, and go to state 122
+
+
+State 105
+
+   31 while_stmt: WHILE '(' l_expr ')' '{' . commands '}'
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    commands      go to state 123
+    command_list  go to state 21
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 106
+
+   25 for_stmt: FOR '(' ffirst ';' l_expr . ';' fthird ')' '{' commands '}'
+   45 l_expr: l_expr . LOG_EQL l_factor
+   46       | l_expr . LOG_AND l_factor
+   47       | l_expr . LOG_OR l_factor
+   48       | l_expr . LOG_GT l_factor
+   49       | l_expr . LOG_LT l_factor
+
+    LOG_EQL  shift, and go to state 76
+    LOG_LT   shift, and go to state 77
+    LOG_GT   shift, and go to state 78
+    LOG_AND  shift, and go to state 79
+    LOG_OR   shift, and go to state 80
+    ';'      shift, and go to state 124
+
+
+State 107
+
+   35 attrib_list: attrib ',' attrib_list .
+
+    $default  reduce using rule 35 (attrib_list)
+
+
+State 108
+
+   68 i_factor: '(' i_expr ')' .
+
+    $default  reduce using rule 68 (i_factor)
+
+
+State 109
+
+   70 r_factor: '(' r_expr ')' .
+
+    $default  reduce using rule 70 (r_factor)
+
+
+State 110
+
+   68 i_factor: '(' . i_expr ')'
+
+    INTEGER  shift, and go to state 60
+    '('      shift, and go to state 110
+
+    i_expr    go to state 86
+    i_term    go to state 66
+    i_factor  go to state 68
+
+
+State 111
+
+   56 i_expr: i_expr '+' i_term .
+   62 i_term: i_term . '*' i_factor
+   63       | i_term . '/' i_factor
+
+    '*'  shift, and go to state 92
+    '/'  shift, and go to state 93
+
+    $default  reduce using rule 56 (i_expr)
+
+
+State 112
+
+   57 i_expr: i_expr '-' i_term .
+   62 i_term: i_term . '*' i_factor
+   63       | i_term . '/' i_factor
+
+    '*'  shift, and go to state 92
+    '/'  shift, and go to state 93
+
+    $default  reduce using rule 57 (i_expr)
+
+
+State 113
+
+   70 r_factor: '(' . r_expr ')'
+
+    REAL  shift, and go to state 61
+    '('   shift, and go to state 113
+
+    r_expr    go to state 87
+    r_term    go to state 67
+    r_factor  go to state 69
+
+
+State 114
+
+   59 r_expr: r_expr '+' r_term .
+   65 r_term: r_term . '*' r_factor
+   66       | r_term . '/' r_factor
+
+    '*'  shift, and go to state 94
+    '/'  shift, and go to state 95
+
+    $default  reduce using rule 59 (r_expr)
+
+
+State 115
+
+   60 r_expr: r_expr '-' r_term .
+   65 r_term: r_term . '*' r_factor
+   66       | r_term . '/' r_factor
+
+    '*'  shift, and go to state 94
+    '/'  shift, and go to state 95
+
+    $default  reduce using rule 60 (r_expr)
+
+
+State 116
+
+   62 i_term: i_term '*' i_factor .
+
+    $default  reduce using rule 62 (i_term)
+
+
+State 117
+
+   63 i_term: i_term '/' i_factor .
+
+    $default  reduce using rule 63 (i_term)
+
+
+State 118
+
+   65 r_term: r_term '*' r_factor .
+
+    $default  reduce using rule 65 (r_term)
+
+
+State 119
+
+   66 r_term: r_term '/' r_factor .
+
+    $default  reduce using rule 66 (r_term)
+
+
+State 120
+
+    4 program_end: ID '(' ')' . '{' commands '}' program_end
+
+    '{'  shift, and go to state 125
+
+
+State 121
+
+   22 if_stmt: IF '(' l_expr ')' '{' commands . '}' else_stmt
+
+    '}'  shift, and go to state 126
+
+
+State 122
+
+   32 dowhile_stmt: DO '{' commands '}' WHILE '(' . l_expr ')' ';'
+
+    INTEGER  shift, and go to state 47
+    REAL     shift, and go to state 48
+    ID       shift, and go to state 49
+    LOG_NOT  shift, and go to state 50
+    '('      shift, and go to state 51
+
+    l_expr    go to state 127
+    l_factor  go to state 53
+
+
+State 123
+
+   31 while_stmt: WHILE '(' l_expr ')' '{' commands . '}'
+
+    '}'  shift, and go to state 128
+
+
+State 124
+
+   25 for_stmt: FOR '(' ffirst ';' l_expr ';' . fthird ')' '{' commands '}'
+
+    error       shift, and go to state 56
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+
+    ')'  reduce using rule 28 (fthird)
+
+    cmd          go to state 129
+    fthird       go to state 130
+    declaration  go to state 29
+    attrib       go to state 30
+    i_attrib     go to state 31
+    r_attrib     go to state 32
+
+
+State 125
+
+    4 program_end: ID '(' ')' '{' . commands '}' program_end
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    commands      go to state 131
+    command_list  go to state 21
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 126
+
+   22 if_stmt: IF '(' l_expr ')' '{' commands '}' . else_stmt
+
+    ELSE  shift, and go to state 132
+
+    $default  reduce using rule 23 (else_stmt)
+
+    else_stmt  go to state 133
+
+
+State 127
+
+   32 dowhile_stmt: DO '{' commands '}' WHILE '(' l_expr . ')' ';'
+   45 l_expr: l_expr . LOG_EQL l_factor
+   46       | l_expr . LOG_AND l_factor
+   47       | l_expr . LOG_OR l_factor
+   48       | l_expr . LOG_GT l_factor
+   49       | l_expr . LOG_LT l_factor
+
+    LOG_EQL  shift, and go to state 76
+    LOG_LT   shift, and go to state 77
+    LOG_GT   shift, and go to state 78
+    LOG_AND  shift, and go to state 79
+    LOG_OR   shift, and go to state 80
+    ')'      shift, and go to state 134
+
+
+State 128
+
+   31 while_stmt: WHILE '(' l_expr ')' '{' commands '}' .
+
+    $default  reduce using rule 31 (while_stmt)
+
+
+State 129
+
+   29 fthird: cmd . ',' fthird
+   30       | cmd .
+
+    ','  shift, and go to state 135
+
+    $default  reduce using rule 30 (fthird)
+
+
+State 130
+
+   25 for_stmt: FOR '(' ffirst ';' l_expr ';' fthird . ')' '{' commands '}'
+
+    ')'  shift, and go to state 136
+
+
+State 131
+
+    4 program_end: ID '(' ')' '{' commands . '}' program_end
+
+    '}'  shift, and go to state 137
+
+
+State 132
+
+   24 else_stmt: ELSE . '{' commands '}'
+
+    '{'  shift, and go to state 138
+
+
+State 133
+
+   22 if_stmt: IF '(' l_expr ')' '{' commands '}' else_stmt .
+
+    $default  reduce using rule 22 (if_stmt)
+
+
+State 134
+
+   32 dowhile_stmt: DO '{' commands '}' WHILE '(' l_expr ')' . ';'
+
+    ';'  shift, and go to state 139
+
+
+State 135
+
+   29 fthird: cmd ',' . fthird
+
+    error       shift, and go to state 56
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+
+    ')'  reduce using rule 28 (fthird)
+
+    cmd          go to state 129
+    fthird       go to state 140
+    declaration  go to state 29
+    attrib       go to state 30
+    i_attrib     go to state 31
+    r_attrib     go to state 32
+
+
+State 136
+
+   25 for_stmt: FOR '(' ffirst ';' l_expr ';' fthird ')' . '{' commands '}'
+
+    '{'  shift, and go to state 141
+
+
+State 137
+
+    4 program_end: ID '(' ')' '{' commands '}' . program_end
+
+    error  shift, and go to state 71
+    ID     shift, and go to state 72
+
+    $end  reduce using rule 3 (program_end)
+
+    program_end  go to state 142
+
+
+State 138
+
+   24 else_stmt: ELSE '{' . commands '}'
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    commands      go to state 143
+    command_list  go to state 21
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 139
+
+   32 dowhile_stmt: DO '{' commands '}' WHILE '(' l_expr ')' ';' .
+
+    $default  reduce using rule 32 (dowhile_stmt)
+
+
+State 140
+
+   29 fthird: cmd ',' fthird .
+
+    $default  reduce using rule 29 (fthird)
+
+
+State 141
+
+   25 for_stmt: FOR '(' ffirst ';' l_expr ';' fthird ')' '{' . commands '}'
+
+    error       shift, and go to state 8
+    IF          shift, and go to state 9
+    DO          shift, and go to state 10
+    WHILE       shift, and go to state 11
+    FOR         shift, and go to state 12
+    BREAK       shift, and go to state 13
+    PRINT       shift, and go to state 14
+    RETURN      shift, and go to state 15
+    INT_TYPE    shift, and go to state 16
+    FLOAT_TYPE  shift, and go to state 17
+    ID          shift, and go to state 18
+    '{'         shift, and go to state 19
+
+    '}'  reduce using rule 9 (command_list)
+
+    commands      go to state 144
+    command_list  go to state 21
+    command       go to state 22
+    stmt          go to state 23
+    cmd           go to state 24
+    if_stmt       go to state 25
+    for_stmt      go to state 26
+    while_stmt    go to state 27
+    dowhile_stmt  go to state 28
+    declaration   go to state 29
+    attrib        go to state 30
+    i_attrib      go to state 31
+    r_attrib      go to state 32
+
+
+State 142
+
+    4 program_end: ID '(' ')' '{' commands '}' program_end .
+
+    $default  reduce using rule 4 (program_end)
+
+
+State 143
+
+   24 else_stmt: ELSE '{' commands . '}'
+
+    '}'  shift, and go to state 145
+
+
+State 144
+
+   25 for_stmt: FOR '(' ffirst ';' l_expr ';' fthird ')' '{' commands . '}'
+
+    '}'  shift, and go to state 146
+
+
+State 145
+
+   24 else_stmt: ELSE '{' commands '}' .
+
+    $default  reduce using rule 24 (else_stmt)
+
+
+State 146
+
+   25 for_stmt: FOR '(' ffirst ';' l_expr ';' fthird ')' '{' commands '}' .
+
+    $default  reduce using rule 25 (for_stmt)
