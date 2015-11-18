@@ -1,0 +1,24 @@
+TABELA DE SÍMBOLOS
+Registros: 17
+
++---------------------------
+|  -   | TOKEN      | LEXEME
++---------------------------
+| 1    | IF         | if
+| 2    | DO         | do
+| 3    | WHILE      | while
+| 4    | FOR        | for
+| 5    | BREAK      | break
+| 6    | CONTINUE   | continue
+| 7    | CONTINUE   | int
+| 8    | INT        | float
+| 9    | FLOAT      | return
+| 10   | ID         | teste_id
+| 11   | ID         | naovalido
+| 12   | ID         | string
+| 13   | ID         | main
+| 14   | ID         | bla
+| 15   | ID         | puts
+| 16   | ID         | alsdjflasjfl
+| 17   | ID         | teste
++---------------------------

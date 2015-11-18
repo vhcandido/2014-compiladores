@@ -1,0 +1,20 @@
+//Comentário
+
+int teste_id = 10;
+float 3id_invalido = .1124, naovalido = 2p2;
+string = "baçlkajsdflas";
+"
+"
+int main() {
+	float bla = 10;
+	puts("Teste de string");
+	//Comentário que não deve aparecer
+""
+"outra string                 asdf
+com
+múltiplas linhas" alsdjflasjfl
+	for(bla; bla>=0; bla--) {
+		teste();
+	}
+	return 0;
+}
